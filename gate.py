@@ -161,7 +161,7 @@ def logic_xor(input):
     input -- List of input values
     """
     output = input[0]
-    for i in range(1, len(input))
+    for i in range(1, len(input)):
         # If the stored output is the same as the current input, then set the
         # output to logic 0.
         if output is input[i]:

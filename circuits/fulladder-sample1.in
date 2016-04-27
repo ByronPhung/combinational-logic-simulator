@@ -1,0 +1,6 @@
+5    carry    OR     2     3    4
+0    xor1     Xor    i0    i1
+2    and2     AnD    I0    I2
+3    AND1     AND    i0    I1
+4    AND3     AND    i1    I2
+1    sum      xor    0     I2

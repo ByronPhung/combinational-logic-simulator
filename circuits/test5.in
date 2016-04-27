@@ -1,0 +1,7 @@
+2 Y0 AND I2 0 1
+3 y1 and i3 0 i1
+4 y2 and i4 1 i0
+5 y3 and i0 i1 i5
+0 noti0 not i0
+1 noti1 NOT I1
+6 MUX OR 2 3 4 5

@@ -1,0 +1,5 @@
+0 sum xor i0 i1 i2
+1 nand2 nand i0 i2
+2 nand1 nand i0 i1
+3 nand3 nand i1 i2
+4 carry nand 2 3 1

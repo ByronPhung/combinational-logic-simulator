@@ -1,7 +1,7 @@
 #===============================================================================
 #  File        : main.py
 #  Project     : Combinational Logic Simulator
-#  Description : Python simulation of combinational logic circuits.
+#  Description : Simulate combinational logic circuits using Python.
 #  Company     : Cal Poly Pomona
 #  Engineer    : Byron Phung
 #===============================================================================
@@ -10,27 +10,65 @@
 #  Libraries
 #===============================================================================
 
+#-------------------------------------------------------------------------------
+#  Existing Python Modules
+#-------------------------------------------------------------------------------
+
+# Common pathname manipulations
+# Reference: https://docs.python.org/2/library/os.path.html
+import os.path
+
+#-------------------------------------------------------------------------------
+#  Custom Modules
+#-------------------------------------------------------------------------------
+
+# Logic gate simulation
+# Reference: gate.py
 from gate import Gate
+
+# Combinational logic simulation
+# Reference: circuit.py
+from circuit import Circuit
 
 #===============================================================================
 #  Functions
 #===============================================================================
 
 def main():
-    gate1 = Gate(0, "not1", "not", ["a", "b"])
-    gate2 = Gate(1, "or1", "or", ["a", "b"])
-    gate3 = Gate(2, "and1", "and", ["a", "b"])
-    gate4 = Gate(3, "xor1", "xor", ["a", "b"])
-    gate5 = Gate(4, "nand1", "nand", ["a", "b"])
-    gate6 = Gate(5, "nor1", "nor", ["a", "b"])
-    gate7 = Gate(6, "xnor1", "xnor", ["a", "b"])
-    gate1.print()
-    gate2.print()
-    gate3.print()
-    gate4.print()
-    gate5.print()
-    gate6.print()
-    gate7.print()
+    # Ask for path to circuit file.
+    file = input("INPUT:: Enter path to circuit file (e.g. D:\Path\To\circuit1.in): ")
+
+    # If the file exists, then check if it is a supported input file.
+    if os.path.isfile(file):
+        # If it is a supported input file, then parse it.
+        if file.endswith(".in"):
+            # Create a new Circuit object consisting of the gates from the
+            # input file.
+            circuit = Circuit(file)
+            print("INFO::  Printing gates in circuit...")
+            print()
+
+            # Print the list of gates sorted by ID.
+            circuit.print_gates()
+            print()
+
+            # Prompt the user for desired outputs.
+            print("INFO::  Use spaces to select multiples (e.g., 1 4 6).")
+            selected_output = input("INPUT:: Enter desired outputs by ID for truth table: ")
+
+            # Print the truth table for the selected outputs.
+            print("INFO::  Printing truth table for selected outputs...")
+            print()
+            circuit.print_truth_table(selected_output.split())
+            
+        # Otherwise, display an error.
+        else:
+            print("ERROR:: Invalid file (\"" + file + "\"")
+            print("        File must be of extension .in (e.g. circuit1.in).")
+            
+    # Otherwise, display an error.
+    else:
+        print("ERROR:: Cannot find file at path \"" + file + "\"")
 
 #===============================================================================
 #  Main Execution

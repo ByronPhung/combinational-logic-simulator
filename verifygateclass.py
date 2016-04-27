@@ -1,7 +1,7 @@
 #===============================================================================
 #  File        : verifygateclass.py
 #  Project     : Combinational Logic Simulator
-#  Description : Python script to verify the Gate class.
+#  Description : Verify the custom gate.py module.
 #  Company     : Cal Poly Pomona
 #  Engineer    : Byron Phung
 #===============================================================================
@@ -10,6 +10,12 @@
 #  Libraries
 #===============================================================================
 
+#-------------------------------------------------------------------------------
+#  Custom Modules
+#-------------------------------------------------------------------------------
+
+# Logic gate simulation
+# Reference: gate.py
 from gate import Gate
 
 #===============================================================================
@@ -29,7 +35,7 @@ def main():
 
     # Print each gate information and its truth table.
     for gate in gates:
-        gate.print()
+        gate.print_info()
         print()
         gate.truth_table(3)
         print()

@@ -1,26 +1,26 @@
-#===============================================================================
+#===================================================================================================================================
 #  File        : circuit.py
 #  Project     : Combinational Logic Simulator
 #  Description : Simulate combinational logic circuits.
 #  Company     : Cal Poly Pomona
 #  Engineer    : Byron Phung
-#===============================================================================
+#===================================================================================================================================
 
-#===============================================================================
+#===================================================================================================================================
 #  Libraries
-#===============================================================================
+#===================================================================================================================================
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------
 #  Existing Python Modules
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------
 
 # Functions creating iterators for efficient looping
 # Reference: https://docs.python.org/2/library/itertools.html
 from itertools import *
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------
 #  Custom Modules
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------
 
 # Logic gate simulation
 # Reference: gate.py
@@ -30,9 +30,9 @@ from gate import Gate
 # Reference: system.py
 from system import *
 
-#===============================================================================
+#===================================================================================================================================
 #  Class Definition
-#===============================================================================
+#===================================================================================================================================
 
 class Circuit(object):
     """Simulate combinational logic circuits.
@@ -40,8 +40,9 @@ class Circuit(object):
     Keyword arguments:
     file -- Circuit file to read
     """
-    def __init__(self, file):
+    def __init__(self, file, output_file):
         self.__parse_circuit_file(file)
+        self.__output_file = output_file
 
     def __parse_circuit_file(self, file):
         """Parse the circuit file.
@@ -98,16 +99,13 @@ class Circuit(object):
         Keyword arguments:
         <None>
         """
-        # Base Condition: If all left and right indexes have finished parsing,
-        #                 then do nothing.
+        # Base Condition: If all left and right indexes have finished parsing, then do nothing.
         if left == right:
             pass
 
-        # Base Condition: If there are only 2 elements being compared, then
-        #                 simply check the order.
+        # Base Condition: If there are only 2 elements being compared, then simply check the order.
         elif left == right - 1:
-            # If the gate's ID at left index is greater than that of the right,
-            # then swap the 2 gates.
+            # If the gate's ID at left index is greater than that of the right, then swap the 2 gates.
             if self.__gates[left].id > self.__gates[right].id:
                 temp = self.__gates[left]
                 self.__gates[left] = self.__gates[right]
@@ -115,8 +113,7 @@ class Circuit(object):
 
         # Recursive Condition: Continue sorting the data.
         else:
-            # Sum the ID values starting from the left index to the right
-            # index.
+            # Sum the ID values starting from the left index to the right index.
             sum = 0
             for i in range(left, right + 1):
                 sum = sum + self.__gates[i].id
@@ -128,33 +125,27 @@ class Circuit(object):
             left_pointer = left
             right_pointer = right
 
-            # Divide the list into 2 sub-lists (if applicable) while the left
-            # pointer is less than the right pointer.
+            # Divide the list into 2 sub-lists (if applicable) while the left pointer is less than the right pointer.
             while left_pointer < right_pointer:
-                # While the left pointer is less than the average, keep
-                # incrementing the left pointer.
+                # While the left pointer is less than the average, keep incrementing the left pointer.
                 while self.__gates[left_pointer].id < average:
                     left_pointer = left_pointer + 1
 
-                # While the right pointer is greater than or equal to the
-                # average, keep incrementing the right pointer.
+                # While the right pointer is greater than or equal to the average, keep incrementing the right pointer.
                 while self.__gates[right_pointer].id >= average:
                     right_pointer = right_pointer - 1
 
-                # If the left pointer is less than the right pointer, then swap
-                # the gates at the left and right pointers.
+                # If the left pointer is less than the right pointer, then swap the gates at the left and right pointers.
                 if left_pointer < right_pointer:
                     temp = self.__gates[left_pointer]
                     self.__gates[left_pointer] = self.__gates[right_pointer]
                     self.__gates[right_pointer] = temp
 
-            # If the left index is less than the right pointer, then sort the
-            # lower half sub-list.
+            # If the left index is less than the right pointer, then sort the lower half sub-list.
             if left < right_pointer:
                 self.__sort_gates_by_id(left, right_pointer)
 
-            # If the right pointer is less than the left pointer, then sort the
-            # upper half sub-list.
+            # If the right pointer is less than the left pointer, then sort the upper half sub-list.
             if right_pointer < left_pointer:
                 self.__sort_gates_by_id(left_pointer, right)
 
@@ -165,19 +156,27 @@ class Circuit(object):
         <None>
         """
         # Print the table headers and a border.
-        print("ID    Name    Type    Inputs")
+        print("ID      Name            Type    Inputs")
         print("-" * 80)
 
         # Print each gate.
         for gate in self.__gates:
             # Print the gate's ID, name, and type.
-            print(str(gate.id).ljust(2) + " " * 4 + gate.name.ljust(12)
+            print(str(gate.id).ljust(8) + gate.name.ljust(16)
                   + gate.type.ljust(4) + " " * 4, end="")
 
             # Print the gate's inputs.
             for input in gate.input:
-                print(input.ljust(2) + "  ", end="")
+                print(input.ljust(5) + "  ", end="")
             print()
+
+    def get_gates(self):
+        """Get the gates in the current circuit.
+
+        Keyword arguments:
+        <None>
+        """
+        return self.__gates
 
     def print_truth_table(self, selected_outputs):
         """Print the truth table with the selected outputs (if applicable).
@@ -188,17 +187,14 @@ class Circuit(object):
         selected_outputs -- List of selected outputs
         """
         # Get the number of general input values.
-        num_general_values = self.__get_num_of_general_input_values()
-
-        # Generate 2^n bit general combinations.
-        combinations = list(product([0, 1], repeat=num_general_values))
+        num_general_values = self.get_num_of_general_input_values()
 
         # Print the truth table headers.
         self.__print_truth_table_headers(num_general_values, selected_outputs)
                     
-        # Calculate the values of each gate and print the outputs of the
-        # selected gates (if applicable) in the truth table.
-        for combination in combinations:
+        # Calculate the values of each gate and print the outputs of the selected gates (if applicable) in the truth table for
+        # 2^n combinations.
+        for combination in product([0, 1], repeat=num_general_values):
             gate_values = self.__calculate_outputs_for_combinations(combination)
             self.__print_gate_outputs(combination, selected_outputs, gate_values)
 
@@ -211,19 +207,18 @@ class Circuit(object):
         """
         # Print the headers for the general combinations.
         for i in range(num_bits):
-            print("I" + str(i) + " " * 4, end="")
+            print_or_output(("I" + str(i)).ljust(len(str(i)) + 2), self.__output_file)
 
         # If outputs were selected, then only print headers for those outputs.
         if len(selected_outputs) > 0:
             for output in selected_outputs:
-                print(self.__gates[int(output)] .name.ljust(8), end="")
+                print_or_output(self.__gates[int(output)].name.ljust(len(self.__gates[int(output)].name) + 1), self.__output_file)
 
         # Otherwise, print headers for all outputs.
         else:
             for gate in self.__gates:
-                print(gate.name.ljust(8), end="")
-        print()
-        print("-" * 80)
+                print_or_output(gate.name.ljust(len(gate.name) + 1), self.__output_file)
+        print_or_output("", self.__output_file, False)
 
     def __calculate_outputs_for_combinations(self, combination):
         """Calculate the outputs for the current bit combination.
@@ -238,13 +233,11 @@ class Circuit(object):
         while not self.__are_all_gate_values_found(gate_values):
             # Parse each gate value.
             for i in range(len(gate_values)):
-                # If the gate value has already been determined, then skip
-                # the current iteration.
+                # If the gate value has already been determined, then skip the current iteration.
                 if gate_values[i] != '':
                     continue
 
-                # If all the required inputs for the current gate are
-                # available, then calculate the gate value.
+                # If all the required inputs for the current gate are available, then calculate the gate value.
                 if self.__are_all_required_inputs_available(self.__gates[i], gate_values):
                     # Get the int input values for the current gate.
                     inputs = []
@@ -254,8 +247,7 @@ class Circuit(object):
                         else:
                             inputs.append(gate_values[int(input)])
 
-                    # Assign the gate value to the current index of the
-                    # list of block values.
+                    # Assign the gate value to the current index of the list of block values.
                     gate_values[i] = self.__gates[i].output(inputs)
 
         # Return the calculated gate values.
@@ -265,26 +257,26 @@ class Circuit(object):
         """Print the outputs of the selected gates in the truth table.
 
         Keyword arguments:
+        combination      -- Current combination to calculate
         selected_outputs -- List of selected outputs
         gate_values      -- List of values for each gate
         """
         # Print the current general input combination.
-        for bit in combination:
-            print(str(bit).ljust(2) + " " * 4, end="")
+        for i in range(len(combination)):
+            print_or_output(str(combination[i]).ljust(len(str(i)) + 2), self.__output_file)
 
-        # If outputs were selected, then only print the values for those
-        # outputs.
+        # If outputs were selected, then only print the values for those outputs.
         if len(selected_outputs) > 0:
             for output in selected_outputs:
-                print(str(gate_values[int(output)]).ljust(8), end="")
+                print_or_output(str(gate_values[int(output)]).ljust(len(self.__gates[int(output)].name) + 1), self.__output_file)
 
         # Otherwise, print values for all outputs.
         else:
             for gate in self.__gates:
-                print(str(gate_values[gate.id]).ljust(8), end="")
-        print()
+                print_or_output(str(gate_values[gate.id]).ljust(len(gate.name) + 1), self.__output_file)
+        print_or_output("", self.__output_file, False)
 
-    def __get_num_of_general_input_values(self):
+    def get_num_of_general_input_values(self):
         """Get the number of general input values.
 
         Keyword arguments:
@@ -293,19 +285,16 @@ class Circuit(object):
         # Track the number of general input values.
         num_general_values = 0
 
-        # Parse each gate to determine the maximum number of general input
-        # values.
+        # Parse each gate to determine the maximum number of general input values.
         for gate in self.__gates:
             # Parse each gate input.
             for input in gate.input:
-                # If the current input starts with an I, then get its general
-                # position.
+                # If the current input starts with an I, then get its general position.
                 if input.startswith("I"):
                     # Get only the integer value of the general input value.
                     general_value = self.__get_int_of_general_value(input)
                     
-                    # If its general position is greater than the current stored
-                    # number of general values, then store that position.
+                    # If its general position is greater than the current stored number of general values, then store that position.
                     if general_value + 1 > num_general_values:
                         num_general_values = general_value + 1
 
@@ -353,3 +342,4 @@ class Circuit(object):
 
         # Otherwise, return True.
         return True
+        

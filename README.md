@@ -1,4 +1,4 @@
-# Combinational Logic Simulator v1.1.0
+# Combinational Logic Simulator
 
 This simple Python script takes an input file containing the gates and input logic of a combinational logic circuit and generates a truth table of all the possible combinations for either a selected or all gates.
 

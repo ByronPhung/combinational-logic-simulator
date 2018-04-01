@@ -42,7 +42,7 @@ from system import *
 #  Global Variables
 #===================================================================================================================================
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 #===================================================================================================================================
 #  Functions
@@ -99,7 +99,8 @@ def main():
 
             # Prompt the user for desired outputs.
             print("INFO::  Use spaces to select multiples (e.g., 1 4 6).")
-            selected_output = input("INPUT:: Enter desired outputs by ID for truth table: ")
+            print("INFO::  To calculate all gates, just press 'Enter' without inputting anything.")
+            selected_output = input("INPUT:: Select gates: ")
 
             # Validate the selected outputs to ensure they are in range.
             print("INFO::  Validating selected outputs...")
@@ -112,9 +113,9 @@ def main():
                 print("INFO::  Printing truth table for selected outputs...")
             print("        This may take awhile for large numbers of inputs because of 2^n combinations...")
             print("        Total Combinations: " + str(pow(2, circuit.get_num_of_general_input_values())))
-            print()
+            if output_file is None:
+                print()
             circuit.print_truth_table(selected_outputs)
-            print_or_output("", output_file, False)
             
         # Otherwise, display an error.
         else:

@@ -73,20 +73,20 @@ Here's an example circuit file that represents a full adder.
 
 ### Command Line
 
-This script is a command-line only tool.
+This is a command-line only tool. Once executed, the tool should walk you through instructions as you use it.
 
 ```
 python main.py [OPTIONS...] path\to\circuit_file.in
 ```
 
-If the circuit is valid, then you will be shown a table of your gates like in the below example.
+If you are still unsure and need help, please don't hesitate to reach out here on GitHub.
 
 #### Supported Command-Line Options
 
 | Option     | Argument            | Description                                                                |
 | ---------- | ------------------- | -------------------------------------------------------------------------- |
 | -h, --help | None                | Shows the help menu.                                                       |
-| -o, --out  | path/to/output_file | Outputs truth table to the specified file insteads of printing to console. |
+| -o, --out  | path/to/output_file | Outputs truth table to the specified file instead of printing to console. |
 
 #### Example Execution
 
@@ -117,7 +117,8 @@ ID      Name            Type    Inputs
 5       CARRY           OR      2      3      4
 
 INFO::  Use spaces to select multiples (e.g., 1 4 6).
-INPUT:: Enter desired outputs by ID for truth table: 0 1 4
+INFO::  To calculate all gates, just press 'Enter' without inputting anything.
+INPUT:: Select gates: 0 1 4
 INFO::  Validating selected outputs...
 INFO::  Printing truth table for selected outputs...
         This may take awhile for large numbers of inputs because of 2^n combinations...
@@ -136,6 +137,10 @@ I0 I1 I2 XOR1 SUM AND3
 
 ## Changelog
 
+* v1.1.1
+  - Updated instructions in main.py.
+  - Cleaned up some text formatting throughout the tool.
+  - Updated README to reflect text & formatting changes.
 * v1.1.0
   - Fixed memory limit issue for circuits with large amounts of input.
     * Note: This was tested with a 36-input, 159 gate circuit. You may still run into a memory limit issue for extremely large circuits, but I still applied a fix to significantly increase this limit.

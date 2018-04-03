@@ -31,7 +31,8 @@ def main():
              Gate(3, "xor1", "xor", ["a", "b"]),
              Gate(4, "nand1", "nand", ["a", "b"]),
              Gate(5, "nor1", "nor", ["a", "b"]),
-             Gate(6, "xnor1", "xnor", ["a", "b"])]
+             Gate(6, "xnor1", "xnor", ["a", "b"]),
+             Gate(7, "buffer1", "buffer", ["a", "b"])]
 
     # Print each gate information and its truth table.
     for gate in gates:

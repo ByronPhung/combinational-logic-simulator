@@ -37,6 +37,7 @@ Gate types can be any of the following supported types:
 * NAND
 * NOR
 * XNOR
+* BUFFER
 
 This column is case-insensitive.
 
@@ -137,6 +138,8 @@ I0 I1 I2 XOR1 SUM AND3
 
 ## Changelog
 
+* v1.1.2
+  - Added support for buffer gates.
 * v1.1.1
   - Updated instructions in main.py.
   - Cleaned up some text formatting throughout the tool.

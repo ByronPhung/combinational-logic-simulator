@@ -57,6 +57,8 @@ class Gate(object):
             return self.__not(self.__or(input))
         elif self.type == "XNOR":
             return self.__not(self.__xor(input))
+        elif self.type == "BUFFER":
+            return self.__buffer(input)
         else:
             print("ERROR:: Invalid gate type (type = \"" + self.type + "\")")
             print("        Use a valid gate type (NOT, OR, AND, XOR, NAND, NOR, or XNOR).")
@@ -74,7 +76,7 @@ class Gate(object):
 
         # If the gate is a NOT gate, then simply do a basic inverter test for
         # 2 inputs.
-        if self.type == "NOT":
+        if self.type == "NOT" or self.type == "BUFFER":
             print("I0 OUT")
             for i in range(2):
                 print(str(i).rjust(2) + " ", end="")
@@ -188,3 +190,27 @@ class Gate(object):
         # Return the calculated logic output.
         return output
         
+    def __buffer(self, input):
+        """Simply buffer for the input value.
+
+        Keyword arguments:
+        input -- Input value
+        """
+        final_input = None
+
+        # If the input is a list, then take the first element.
+        if type(input) is list:
+            final_input = input[0]
+
+        # Otherwise, take the input as is.
+        else:
+            final_input = input
+
+        # If the input was still not assigned, then display an error.
+        if final_input is None:
+            print("ERROR:: Invalid input to NOT gate (input = \"" + input + "\"")
+
+        # Otherwise, simply perform the buffer logic.
+        else:
+            return final_input
+            

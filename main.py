@@ -42,7 +42,7 @@ from system import *
 #  Global Variables
 #===================================================================================================================================
 
-VERSION = "1.1.2"
+VERSION = "1.2.0"
 
 #===================================================================================================================================
 #  Functions
@@ -57,6 +57,10 @@ def get_args():
                         nargs=1,
                         dest='output_file',
                         help='output truth table to specified file instead of printing to console')
+    parser.add_argument('--format-csv',
+                        dest='format_csv',
+                        action='store_true',
+                        help='output truth table in CSV format instead of whitespace-separated row/col')
 
     return parser.parse_args()
 
@@ -76,20 +80,20 @@ def validate_selected_outputs(selected_outputs, num_gates):
         return selected_outputs
 
 def main():
-    # Parse command-line arguments.
+    # Parse the command-line arguments.
     args = get_args()
-
     circuit_file = args.circuit_file[0]
     output_file = args.output_file
     if output_file:
         output_file = output_file[0]
+    format_csv = args.format_csv
 
     # If the file exists, then check if it is a supported input file.
     if os.path.isfile(circuit_file):
         # If it is a supported input file, then parse it.
         if circuit_file.endswith(".in"):
             # Create a new Circuit object consisting of the gates from the input file.
-            circuit = Circuit(circuit_file, output_file)
+            circuit = Circuit(circuit_file, output_file, format_csv)
             print("INFO::  Printing gates in circuit...")
             print()
 

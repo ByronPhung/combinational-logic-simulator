@@ -84,10 +84,11 @@ If you are still unsure and need help, please don't hesitate to reach out here o
 
 #### Supported Command-Line Options
 
-| Option     | Argument            | Description                                                                |
-| ---------- | ------------------- | -------------------------------------------------------------------------- |
-| -h, --help | None                | Shows the help menu.                                                       |
-| -o, --out  | path/to/output_file | Outputs truth table to the specified file instead of printing to console. |
+| Option       | Argument            | Description                                                                |
+| ------------ | ------------------- | -------------------------------------------------------------------------- |
+| -h, --help   | None                | Shows the help menu.                                                       |
+| -o, --out    | path/to/output_file | Outputs truth table to the specified file instead of printing to console.  |
+| --format-csv | None                | Formats truth table output into CSV format.                                  |
 
 #### Example Execution
 
@@ -138,6 +139,8 @@ I0 I1 I2 XOR1 SUM AND3
 
 ## Changelog
 
+* v1.2.0
+  - Added --format-csv option to format truth table output in CSV format.
 * v1.1.2
   - Added support for buffer gates.
 * v1.1.1

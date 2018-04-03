@@ -40,9 +40,10 @@ class Circuit(object):
     Keyword arguments:
     file -- Circuit file to read
     """
-    def __init__(self, file, output_file):
+    def __init__(self, file, output_file, format_csv):
         self.__parse_circuit_file(file)
         self.__output_file = output_file
+        self.__format_csv = format_csv
 
     def __parse_circuit_file(self, file):
         """Parse the circuit file.
@@ -207,17 +208,32 @@ class Circuit(object):
         """
         # Print the headers for the general combinations.
         for i in range(num_bits):
-            print_or_output(("I" + str(i)).ljust(len(str(i)) + 2), self.__output_file)
+            if self.__format_csv:
+                print_or_output("I" + str(i) + ",", self.__output_file)
+            else:
+                print_or_output(("I" + str(i)).ljust(len(str(i)) + 2), self.__output_file)
 
         # If outputs were selected, then only print headers for those outputs.
         if len(selected_outputs) > 0:
-            for output in selected_outputs:
-                print_or_output(self.__gates[int(output)].name.ljust(len(self.__gates[int(output)].name) + 1), self.__output_file)
+            for i in range(len(selected_outputs)):
+                output = selected_outputs[i]
+                if self.__format_csv:
+                    print_or_output(self.__gates[int(output)].name, self.__output_file)
+                    if i < len(selected_outputs) - 1:
+                        print_or_output(",", self.__output_file)
+                else:
+                    print_or_output(self.__gates[int(output)].name.ljust(len(self.__gates[int(output)].name) + 1), self.__output_file)
 
         # Otherwise, print headers for all outputs.
         else:
-            for gate in self.__gates:
-                print_or_output(gate.name.ljust(len(gate.name) + 1), self.__output_file)
+            for i in range(len(self.__gates)):
+                gate = self.__gates[i]
+                if self.__format_csv:
+                    print_or_output(gate.name, self.__output_file)
+                    if i < len(self.__gates) - 1:
+                        print_or_output(",", self.__output_file)
+                else:
+                    print_or_output(gate.name.ljust(len(gate.name) + 1), self.__output_file)
         print_or_output("", self.__output_file, False)
 
     def __calculate_outputs_for_combinations(self, combination):
@@ -263,17 +279,32 @@ class Circuit(object):
         """
         # Print the current general input combination.
         for i in range(len(combination)):
-            print_or_output(str(combination[i]).ljust(len(str(i)) + 2), self.__output_file)
+            if self.__format_csv:
+                print_or_output(str(combination[i]) + ",", self.__output_file)
+            else:
+                print_or_output(str(combination[i]).ljust(len(str(i)) + 2), self.__output_file)
 
         # If outputs were selected, then only print the values for those outputs.
         if len(selected_outputs) > 0:
-            for output in selected_outputs:
-                print_or_output(str(gate_values[int(output)]).ljust(len(self.__gates[int(output)].name) + 1), self.__output_file)
+            for i in range(len(selected_outputs)):
+                output = selected_outputs[i]
+                if self.__format_csv:
+                    print_or_output(str(gate_values[int(output)]), self.__output_file)
+                    if i < len(selected_outputs) - 1:
+                        print_or_output(",", self.__output_file)
+                else:
+                    print_or_output(str(gate_values[int(output)]).ljust(len(self.__gates[int(output)].name) + 1), self.__output_file)
 
         # Otherwise, print values for all outputs.
         else:
-            for gate in self.__gates:
-                print_or_output(str(gate_values[gate.id]).ljust(len(gate.name) + 1), self.__output_file)
+            for i in range(len(self.__gates)):
+                gate = self.__gates[i]
+                if self.__format_csv:
+                    print_or_output(str(gate_values[gate.id]), self.__output_file)
+                    if i < len(self.__gates) - 1:
+                        print_or_output(",", self.__output_file)
+                else:
+                    print_or_output(str(gate_values[gate.id]).ljust(len(gate.name) + 1), self.__output_file)
         print_or_output("", self.__output_file, False)
 
     def get_num_of_general_input_values(self):
